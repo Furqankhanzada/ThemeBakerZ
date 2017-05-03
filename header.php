@@ -10,6 +10,7 @@
 
 <body <?php body_class(); ?>>
 <div class="container">
+    <?php the_custom_logo(); ?>
     <h1 id="site-title">
     <span>
         <a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
