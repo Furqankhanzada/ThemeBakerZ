@@ -10,6 +10,9 @@ const imagemin = require('gulp-imagemin');
 
 const livereload = require('gulp-livereload');
 
+const gutil = require( 'gulp-util' );
+const ftp = require( 'vinyl-ftp' );
+
 gulp.task('sass', function () {
     return gulp.src('./assets/css/sass/*.scss')
         .pipe(sourcemaps.init())
@@ -56,6 +59,58 @@ gulp.task('watch', function () {
     gulp.watch('./assets/css/sass/*.scss', ['sass']);
     gulp.watch(['./assets/js/es6/*.js', './assets/js/es6/**/*.js'], ['es6']);
     gulp.watch('./assets/images/img/*', ['imagemin']);
+});
+
+const upload = function (globs, destination) {
+    const conn = ftp.create( {
+        host:     'gator4106.hostgator.com',
+        user:     'warehaus@furqankhanzada.com',
+        password: 'warehaus3950',
+        log:      gutil.log,
+        timeOffset: 50000
+    } );
+
+    return gulp.src( globs, { base: '.', buffer: false } )
+        .pipe( conn.newerOrDifferentSize( destination || '/' ) ) // only upload newer files
+        .pipe( conn.dest( destination || '/' ) );
+};
+
+gulp.task( 'deploy:theme', function () {
+    let globs = [
+        'assets/**',
+        '!assets/css/{scss,scss/**}',
+        '!assets/js/{es6,es6/**}',
+        '!assets/images/{img,img/**}',
+        'inc/**',
+        '404.php',
+        'footer.php',
+        'functions.php',
+        'header.php',
+        'home.php',
+        'index.php',
+        'singular.php',
+        'style.css'
+    ];
+    upload(globs, '/wp/wp-content/themes/theme-bakerz')
+});
+
+gulp.task( 'deploy:theme', function () {
+    let globs = [
+        'assets/**',
+        '!assets/css/{scss,scss/**}',
+        '!assets/js/{es6,es6/**}',
+        '!assets/images/{img,img/**}',
+        'inc/**',
+        '404.php',
+        'footer.php',
+        'functions.php',
+        'header.php',
+        'home.php',
+        'index.php',
+        'singular.php',
+        'style.css'
+    ];
+    upload(globs, '/wp/wp-content/themes/theme-bakerz')
 });
 
 gulp.task('default', ['sass', 'es6', 'imagemin', 'fonts', 'watch'],  function() {
