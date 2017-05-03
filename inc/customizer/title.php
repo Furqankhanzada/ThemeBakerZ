@@ -14,16 +14,6 @@ function themebakerz_title_customize_register( $wp_customize ) {
 
 add_action( 'customize_register', 'themebakerz_title_customize_register' );
 
-/**
- * Render the site title for the selective refresh partial.
- *
- * @since Twenty Eleven 2.4
- * @see themebakerz_customize_register()
- *
- * @return void
- */
-
 function themebakerz_customize_partial_blogname() {
     bloginfo( 'name' );
 }
-
