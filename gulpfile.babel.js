@@ -1,31 +1,22 @@
-const gulp = require('gulp');
-const sass = require('gulp-sass');
-const autoprefixer = require('gulp-autoprefixer');
+import gulp from 'gulp';
+import gulpLoadPlugins from 'gulp-load-plugins';
+const { autoprefixer, babel, concat, imagemin, livereload, sass, sourcemaps, util} = gulpLoadPlugins();
+import ftp from 'vinyl-ftp';
 
-const sourcemaps = require('gulp-sourcemaps');
-const babel = require('gulp-babel');
-const concat = require('gulp-concat');
-
-const imagemin = require('gulp-imagemin');
-
-const livereload = require('gulp-livereload');
-
-const gutil = require( 'gulp-util' );
-const ftp = require( 'vinyl-ftp' );
-
-gulp.task('sass', function () {
+gulp.task('sass', () => {
     return gulp.src('./assets/css/sass/*.scss')
         .pipe(sourcemaps.init())
         .pipe(sass({
-            includePaths: ['./node_modules/bootstrap-sass/assets/stylesheets'],
+            includePaths: ['./node_modules/bootstrap-sass/assets/stylesheets']
         }).on('error', sass.logError))
+        .pipe(autoprefixer())
+        .pipe(autoprefixer())
         .pipe(sourcemaps.write('.'))
-        //.pipe(autoprefixer())
         .pipe(gulp.dest('./assets/css'))
         .pipe(livereload());
 });
 
-gulp.task('es6', function () {
+gulp.task('es6', () => {
     return gulp.src(['./assets/js/es6/*.js', './assets/js/es6/**/*.js'])
         .pipe(sourcemaps.init())
         .pipe(babel({
@@ -37,7 +28,7 @@ gulp.task('es6', function () {
         .pipe(livereload());
 });
 
-gulp.task('imagemin', function () {
+gulp.task('imagemin', () => {
     return gulp.src('./assets/images/img/*')
         .pipe(imagemin([
             imagemin.gifsicle({interlaced: true}),
@@ -49,24 +40,24 @@ gulp.task('imagemin', function () {
         .pipe(livereload());
 });
 
-gulp.task('fonts', function() {
+gulp.task('fonts', () => {
     return gulp.src('./node_modules/bootstrap-sass/assets/fonts/**/*')
         .pipe(gulp.dest('./assets/fonts'));
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', () => {
     livereload.listen();
     gulp.watch('./assets/css/sass/*.scss', ['sass']);
     gulp.watch(['./assets/js/es6/*.js', './assets/js/es6/**/*.js'], ['es6']);
     gulp.watch('./assets/images/img/*', ['imagemin']);
 });
 
-const upload = function (globs, destination) {
+const upload = (globs, destination) => {
     const conn = ftp.create( {
-        host:     'gator4106.hostgator.com',
-        user:     'warehaus@furqankhanzada.com',
-        password: 'warehaus3950',
-        log:      gutil.log,
+        host:     'HOST_ADDRESS',
+        user:     'FTP_USERNAME',
+        password: 'FTP_PASSWORD',
+        log:      util.log,
         timeOffset: 50000
     } );
 
@@ -75,7 +66,7 @@ const upload = function (globs, destination) {
         .pipe( conn.dest( destination || '/' ) );
 };
 
-gulp.task( 'deploy:theme', function () {
+gulp.task( 'deploy:theme', () => {
     let globs = [
         'assets/**',
         '!assets/css/{scss,scss/**}',
@@ -94,25 +85,6 @@ gulp.task( 'deploy:theme', function () {
     upload(globs, '/wp/wp-content/themes/theme-bakerz')
 });
 
-gulp.task( 'deploy:theme', function () {
-    let globs = [
-        'assets/**',
-        '!assets/css/{scss,scss/**}',
-        '!assets/js/{es6,es6/**}',
-        '!assets/images/{img,img/**}',
-        'inc/**',
-        '404.php',
-        'footer.php',
-        'functions.php',
-        'header.php',
-        'home.php',
-        'index.php',
-        'singular.php',
-        'style.css'
-    ];
-    upload(globs, '/wp/wp-content/themes/theme-bakerz')
-});
-
-gulp.task('default', ['sass', 'es6', 'imagemin', 'fonts', 'watch'],  function() {
+gulp.task('default', ['sass', 'es6', 'imagemin', 'fonts', 'watch'], () => {
     // place code for your default task here
 });
