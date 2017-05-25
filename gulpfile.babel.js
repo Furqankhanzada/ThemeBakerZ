@@ -1,13 +1,16 @@
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
-const { autoprefixer, babel, concat, imagemin, livereload, sass, sourcemaps, util} = gulpLoadPlugins();
+const { autoprefixer, babel, concat, imagemin, livereload, sass, sourcemaps, browserify, util} = gulpLoadPlugins();
 import ftp from 'vinyl-ftp';
 
 gulp.task('sass', () => {
     return gulp.src('./assets/css/sass/*.scss')
         .pipe(sourcemaps.init())
         .pipe(sass({
-            includePaths: ['./node_modules/bootstrap-sass/assets/stylesheets']
+            includePaths: [
+              './node_modules/bootstrap-sass/assets/stylesheets',
+              './node_modules/font-awesome-sass/assets/stylesheets'
+            ]
         }).on('error', sass.logError))
         .pipe(autoprefixer())
         .pipe(autoprefixer())
@@ -23,6 +26,9 @@ gulp.task('es6', () => {
             presets: ['es2015']
         }))
         .pipe(concat('all.js'))
+        .pipe(browserify({
+            insertGlobals : true
+        }))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./assets/js'))
         .pipe(livereload());
@@ -41,8 +47,11 @@ gulp.task('imagemin', () => {
 });
 
 gulp.task('fonts', () => {
-    return gulp.src('./node_modules/bootstrap-sass/assets/fonts/**/*')
-        .pipe(gulp.dest('./assets/fonts'));
+    return gulp.src([
+      './node_modules/bootstrap-sass/assets/fonts/**/*',
+      './node_modules/font-awesome-sass/assets/fonts/**/*'
+    ])
+    .pipe(gulp.dest('./assets/fonts'));
 });
 
 gulp.task('watch', () => {
