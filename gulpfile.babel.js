@@ -13,7 +13,6 @@ gulp.task('sass', () => {
             ]
         }).on('error', sass.logError))
         .pipe(autoprefixer())
-        .pipe(autoprefixer())
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./assets/css'))
         .pipe(livereload());
