@@ -1,18 +1,10 @@
 <?php
-// Enable Featured Image Support
-add_theme_support( 'post-thumbnails' );
-// Enable Title Support (that shows on browser tab)
-add_theme_support( 'title-tag' );
-// Enable Title Support (that shows on browser tab)
-add_theme_support( 'custom-logo' );
 
-// Add Theme Main Css and Js
-function themebakerz_scripts() {
-    wp_enqueue_style( 'style-themebakerz', get_template_directory_uri() . '/assets/css/main.css', array(), '1.0.0' );
-    wp_enqueue_script( 'script-themebakerz', get_template_directory_uri() . '/assets/js/all.js', array('jquery', 'customize-preview'), '1.0.0', true );
-}
+/**
+ * Theme Support and Scripts/styles
+ */
 
-add_action( 'wp_enqueue_scripts', 'themebakerz_scripts' );
+require get_parent_theme_file_path( '/inc/theme.php' );
 
 /**
  * Include Customizer Files Here
@@ -20,3 +12,15 @@ add_action( 'wp_enqueue_scripts', 'themebakerz_scripts' );
 
 require get_parent_theme_file_path( '/inc/customizer/title.php' );
 require get_parent_theme_file_path( '/inc/customizer/description.php' );
+
+/**
+ * Helpers
+ */
+
+require get_parent_theme_file_path( '/inc/helpers.php' );
+
+/**
+ * Include Taxonomies
+ */
+
+require get_parent_theme_file_path( '/inc/taxonomies/taxonomy_name.php' );
