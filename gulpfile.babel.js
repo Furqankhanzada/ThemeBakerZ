@@ -11,6 +11,7 @@ gulp.task('sass', () => {
     return gulp.src('./assets/css/sass/*.scss')
         .pipe(sourcemaps.init())
         .pipe(sass({
+            outputStyle: 'compressed',
             includePaths: [
               './node_modules/bootstrap-sass/assets/stylesheets',
               './node_modules/font-awesome-sass/assets/stylesheets'
