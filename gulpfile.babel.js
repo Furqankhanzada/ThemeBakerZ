@@ -1,6 +1,10 @@
+import browserify from 'browserify';
+import babelify from 'babelify';
+import source from "vinyl-source-stream";
+import buffer from "vinyl-buffer";
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
-const { autoprefixer, babel, concat, imagemin, livereload, sass, sourcemaps, browserify, util} = gulpLoadPlugins();
+const { autoprefixer, concat, imagemin, livereload, sass, sourcemaps, uglify, util} = gulpLoadPlugins();
 import ftp from 'vinyl-ftp';
 
 gulp.task('sass', () => {
@@ -19,15 +23,16 @@ gulp.task('sass', () => {
 });
 
 gulp.task('es6', () => {
-    return gulp.src(['./assets/js/es6/*.js', './assets/js/es6/**/*.js'])
-        .pipe(sourcemaps.init())
-        .pipe(babel({
-            presets: ['es2015']
-        }))
-        .pipe(concat('all.js'))
-        .pipe(browserify({
-            insertGlobals : true
-        }))
+    // set up the browserify instance on a task basis
+    let b = browserify({
+        entries: './assets/js/es6/main.js',
+        debug: true
+    });
+    return b.transform(babelify).bundle()
+        .pipe(source('all.js'))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(uglify())
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./assets/js'))
         .pipe(livereload());
