@@ -13,6 +13,7 @@ Custom theme for rapid development with gulp support. Sass, Bootstarap Sass, Es6
   - Font-awesome-sass Support
   - SourceMap Support for JavaScript and Sass
   - Uglify and minification for JavaScript and Css
+  - Images Minification Support
   
 # Gulp
 Go to theme directory and run ```gulp```
