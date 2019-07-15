@@ -13,7 +13,7 @@ gulp.task('sass', () => {
         .pipe(sass({
             outputStyle: 'compressed',
             includePaths: [
-              './node_modules/bootstrap-sass/assets/stylesheets',
+              './node_modules/bootstrap/scss',
               './node_modules/font-awesome-sass/assets/stylesheets'
             ]
         }).on('error', sass.logError))

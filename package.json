@@ -27,8 +27,9 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "bootstrap": "^3.3.7",
-    "bootstrap-sass": "^3.3.7",
-    "font-awesome-sass": "^4.7.0"
+    "bootstrap": "^4.3.1",
+    "font-awesome-sass": "^4.7.0",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0"
   }
 }
